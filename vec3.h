@@ -17,6 +17,9 @@ public:
     double dot(vec3 otherVector);
     void normalize();
     vec3 normalized();
+    double getx();
+    double gety();
+    double getz();
 
     // Getters and setters
     double x() const { return components[0]; }

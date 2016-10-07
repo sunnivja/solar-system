@@ -74,6 +74,22 @@ void vec3::zeros()
     components[2] = 0;
 }
 
+double vec3::getx()
+{
+    return components[0];
+}
+
+double vec3::gety()
+{
+    return components[1];
+}
+
+double vec3::getz()
+{
+    return components[2];
+}
+
+
 vec3 &vec3::operator+=(double rhs)
 {
     components[0] += rhs;
@@ -137,6 +153,8 @@ vec3 &vec3::operator/=(vec3 rhs)
     components[2] /= rhs[2];
     return *this;
 }
+
+
 
 std::ostream &operator<<(std::ostream &os, const vec3 &myVector) // Allows cout << myVector << endl;
 {

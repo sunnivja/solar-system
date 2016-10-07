@@ -1,7 +1,11 @@
+#ifndef CATCH_CONFIG_MAIN
+
 #include <iostream>
 #include <cmath>
 #include "solarsystem.h"
 #include "euler.h"
+#include <math.h>
+#include "verlet.h"
 
 using namespace std;
 
@@ -18,7 +22,7 @@ int main(int numArguments, char **arguments)
     CelestialBody &sun = solarSystem.createCelestialBody( vec3(0,0,0), vec3(0,0,0), 1.0 );
 
     // We don't need to store the reference, but just call the function without a left hand side
-    solarSystem.createCelestialBody( vec3(1, 0, 0), vec3(0, 2*M_PI, 0), 3e-6 );
+    CelestialBody &earth = solarSystem.createCelestialBody( vec3(1, 0, 0), vec3(0, 2*M_PI, 0), 3e-6 );
 
     // To get a list (a reference, not copy) of all the bodies in the solar system, we use the .bodies() function
     vector<CelestialBody> &bodies = solarSystem.bodies();
@@ -28,14 +32,15 @@ int main(int numArguments, char **arguments)
         cout << "The position of this object is " << body.position << " with velocity " << body.velocity << endl;
     }
 
-    double dt = 0.001;
-    Euler integrator(dt);
+    double dt = 0.1;
+    verlet integrator(dt);
     for(int timestep=0; timestep<numTimesteps; timestep++) {
         integrator.integrateOneStep(solarSystem);
-        solarSystem.writeToFile("positions.xyz");
+        solarSystem.writeToFile("positions.txt");
     }
 
     cout << "I just created my first solar system that has " << solarSystem.bodies().size() << " objects." << endl;
     return 0;
 }
 
+#endif
