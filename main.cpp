@@ -11,7 +11,7 @@ using namespace std;
 
 int main(int numArguments, char **arguments)
 {
-    int numTimesteps = 1000;
+    int numTimesteps = 2000;
     if(numArguments >= 2) numTimesteps = atoi(arguments[1]);
 
     SolarSystem solarSystem;
@@ -24,6 +24,8 @@ int main(int numArguments, char **arguments)
     // We don't need to store the reference, but just call the function without a left hand side
     CelestialBody &earth = solarSystem.createCelestialBody( vec3(1, 0, 0), vec3(0, 2*M_PI, 0), 3e-6 );
 
+    CelestialBody &jupiter = solarSystem.createCelestialBody(vec3(5.2, 0, 0), vec3(0, 3*M_PI, 0), 3E-3);
+
     // To get a list (a reference, not copy) of all the bodies in the solar system, we use the .bodies() function
     vector<CelestialBody> &bodies = solarSystem.bodies();
 
@@ -33,10 +35,10 @@ int main(int numArguments, char **arguments)
     }
 
     double dt = 0.1;
-    verlet integrator(dt);
+    Euler integrator(dt);
     for(int timestep=0; timestep<numTimesteps; timestep++) {
         integrator.integrateOneStep(solarSystem);
-        solarSystem.writeToFile("positions.txt");
+        solarSystem.writeToFile("positions.dat");
     }
 
     cout << "I just created my first solar system that has " << solarSystem.bodies().size() << " objects." << endl;

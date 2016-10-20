@@ -1,5 +1,6 @@
 #include "solarsystem.h"
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 SolarSystem::SolarSystem() :
@@ -15,7 +16,8 @@ CelestialBody& SolarSystem::createCelestialBody(vec3 position, vec3 velocity, do
 
 void SolarSystem::calculateForcesAndEnergy()
 {
-    int G = 1;
+    //int G = 6.63E-11*(1.5E-11)^2*(2E30)^2;
+    int G = 4*M_PI*M_PI;
     m_kineticEnergy = 0;
     m_potentialEnergy = 0;
     m_angularMomentum.zeros();
@@ -31,15 +33,16 @@ void SolarSystem::calculateForcesAndEnergy()
             CelestialBody &body2 = m_bodies[j];
             vec3 deltaRVector = body1.position - body2.position;
             double dr = deltaRVector.length();
-            double param = G*body1.mass*body2.mass;
+            double param = G*body2.mass;
             // Calculate the force and potential energy here
-            body1.force = param*deltaRVector/(dr*dr*dr);
-            body2.force = -1*body1.force;
-            m_potentialEnergy = -param/dr;
-            m_angularMomentum += body1.mass*(deltaRVector.cross(body1.velocity));
+            body2.force += param*deltaRVector.normalized()/(dr*dr);
+            body2.force -= body1.force;
+            //m_potentialEnergy -= param/dr;
+            //m_angularMomentum += body1.mass*(deltaRVector.cross(body1.velocity));
         }
-        //m_angularMomentum += body1.mass*(body1.position.cross(body1.velocity));
+        m_angularMomentum += body1.mass*(body1.position.cross(body1.velocity));
         m_kineticEnergy += 0.5*body1.mass*body1.velocity.lengthSquared();
+
     }
 }
 

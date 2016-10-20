@@ -1,8 +1,9 @@
-DEFINES += CATCH_CONFIG_MAIN
+
 TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
+#DEFINES += CATCH_CONFIG_MAIN
 
 SOURCES += main.cpp \
     celestialbody.cpp \

@@ -37,7 +37,7 @@ TEST_CASE("Preservation of angular momentum"){
 
     }
     cout << ang_mom[0] << endl;
-    REQUIRE(norm(ang_mom[0], 3) == norm(ang_mom[100], 3));
+    REQUIRE(norm(ang_mom[0], 3) == Approx(norm(ang_mom[100], 3)));
 
 
 }
@@ -54,7 +54,7 @@ TEST_CASE("Preservation of potential energy"){
         integrator.integrateOneStep(solarSystem);
         pot_e[timestep] = solarSystem.potentialEnergy();
     }
-    REQUIRE(pot_e[100] == pot_e[0]);
+    REQUIRE(pot_e[100] == Approx(pot_e[0]));
 
 }
 
@@ -70,7 +70,7 @@ TEST_CASE("Preservation og kinetic energy"){
          integrator.integrateOneStep(solarSystem);
          kin_e[timestep] = solarSystem.kineticEnergy();
 
-    REQUIRE(kin_e[0] == kin_e[100]);
+    REQUIRE(kin_e[0] == Approx(kin_e[100]));
 }
 }
 
