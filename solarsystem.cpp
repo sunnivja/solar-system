@@ -16,7 +16,6 @@ CelestialBody& SolarSystem::createCelestialBody(vec3 position, vec3 velocity, do
 
 void SolarSystem::calculateForcesAndEnergy()
 {
-    //int G = 6.63E-11*(1.5E-11)^2*(2E30)^2;
     int G = 4*M_PI*M_PI;
     m_kineticEnergy = 0;
     m_potentialEnergy = 0;
@@ -33,18 +32,18 @@ void SolarSystem::calculateForcesAndEnergy()
             CelestialBody &body2 = m_bodies[j];
             vec3 deltaRVector = body1.position - body2.position;
             double dr = deltaRVector.length();
-            double param = G*body2.mass;
+            //double param = G*body1.mass;
             // Calculate the force and potential energy here
-            body2.force += param*deltaRVector.normalized()/(dr*dr);
-            body2.force -= body1.force;
-            //m_potentialEnergy -= param/dr;
-            //m_angularMomentum += body1.mass*(deltaRVector.cross(body1.velocity));
+            body1.force -= G*body1.mass*body2.mass*deltaRVector.normalized()/double(dr*dr);
+            m_potentialEnergy = -G*body2.mass/dr;
+            body2.force += G*body1.mass*body2.mass*deltaRVector.normalized()/double(dr*dr);
         }
-        m_angularMomentum += body1.mass*(body1.position.cross(body1.velocity));
+        m_angularMomentum += body1.position.cross(body1.velocity);
         m_kineticEnergy += 0.5*body1.mass*body1.velocity.lengthSquared();
 
     }
 }
+
 
 int SolarSystem::numberOfBodies() const
 {
@@ -80,6 +79,7 @@ void SolarSystem::writeToFile(string filename)
     //m_file << "Positions" << endl;
     for(CelestialBody &body : m_bodies) {
         m_file << body.position.x() << " " << body.position.y() << " " << body.position.z() << "\n";
+        //m_file << body.velocity.x() << " " << body.velocity.y() << " " << body.velocity.z() << "\n";
     }
 }
 
@@ -92,3 +92,4 @@ std::vector<CelestialBody> &SolarSystem::bodies()
 {
     return m_bodies;
 }
+

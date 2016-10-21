@@ -72,6 +72,22 @@ TEST_CASE("Preservation og kinetic energy"){
 
     REQUIRE(kin_e[0] == Approx(kin_e[100]));
 }
+TEST_CASE("Preservation of total energy"){
+    SolarSystem solarSystem;
+    CelestialBody &test__object = solarSystem.createCelestialBody(vec3(1, 0, 0), vec3(0, 2*M_PI, 0), 1E-4);
+    CelestialBody &large_object = solarSystem.createCelestialBody(vec3(0, 0, 0), vec3(0, 0, 0), 1);
+    double dt = 0.1;
+    Euler integrator(dt);
+    int numTimesteps = 1000;
+    double* kin_e = new double[1000];
+    double* pot_e = new double[1000];
+    for (int timestep = 0; timestep<numTimesteps; timestep++){
+         integrator.integrateOneStep(solarSystem);
+         kin_e[timestep] = solarSystem.kineticEnergy();
+         pot_e[timestep] = solarSystem.kineticEnergy();
+
+    REQUIRE((kin_e[0] + pot_e[0]) == Approx(kin_e[100] + pot_e[100]));
+}
 }
 
 double norm(double* vec, int n){
