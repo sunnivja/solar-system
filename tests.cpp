@@ -4,9 +4,9 @@
 #include "tests.h"
 #include "catch.hpp"
 #include "vec3.h"
-#include "celestialbody.h"
-#include "euler.h"
-#include "solarsystem.h"
+#include "twobody.h"
+#include "eulercromer.h"
+#include "system.h"
 #include "verlet.h"
 #include "math.h"
 #include <iostream>
@@ -18,11 +18,11 @@ double norm(double*vec, int n);
 tests::tests()
 {}
 TEST_CASE("Preservation of angular momentum"){
-    SolarSystem solarSystem;
-    CelestialBody &test__object = solarSystem.createCelestialBody(vec3(1, 0, 0), vec3(0, 2*M_PI, 0), 1E-4);
-    CelestialBody &large_object = solarSystem.createCelestialBody(vec3(0, 0, 0), vec3(0, 0, 0), 1);
+    System solarSystem;
+    Particle &test__object = solarSystem.addParticle(vec3(1, 0, 0), vec3(0, 2*M_PI, 0), 1E-4);
+    Particle &large_object = solarSystem.addParticle(vec3(0, 0, 0), vec3(0, 0, 0), 1);
     double dt = 0.1;
-    Euler integrator(dt);
+    EulerCromer integrator(dt);
     int numTimesteps = 1000;
     double** ang_mom = new double*[1000];
     for (int i=0;i<1000;i++){
@@ -43,11 +43,11 @@ TEST_CASE("Preservation of angular momentum"){
 }
 
 TEST_CASE("Preservation of potential energy"){
-    SolarSystem solarSystem;
-    CelestialBody &test__object = solarSystem.createCelestialBody(vec3(1, 0, 0), vec3(0, 2*M_PI, 0), 1E-4);
-    CelestialBody &large_object = solarSystem.createCelestialBody(vec3(0, 0, 0), vec3(0, 0, 0), 1);
+    System solarSystem;
+    Particle &test__object = solarSystem.addParticle(vec3(1, 0, 0), vec3(0, 2*M_PI, 0), 1E-4);
+    Particle &large_object = solarSystem.addParticle(vec3(0, 0, 0), vec3(0, 0, 0), 1);
     double dt = 0.1;
-    Euler integrator(dt);
+    EulerCromer integrator(dt);
     int numTimesteps = 1000;
     double* pot_e = new double[1000];
     for (int timestep = 0; timestep<numTimesteps; timestep++){
@@ -59,11 +59,11 @@ TEST_CASE("Preservation of potential energy"){
 }
 
 TEST_CASE("Preservation og kinetic energy"){
-    SolarSystem solarSystem;
-    CelestialBody &test__object = solarSystem.createCelestialBody(vec3(1, 0, 0), vec3(0, 2*M_PI, 0), 1E-4);
-    CelestialBody &large_object = solarSystem.createCelestialBody(vec3(0, 0, 0), vec3(0, 0, 0), 1);
+    System solarSystem;
+    Particle &test__object = solarSystem.addParticle(vec3(1, 0, 0), vec3(0, 2*M_PI, 0), 1E-4);
+    Particle &large_object = solarSystem.addParticle(vec3(0, 0, 0), vec3(0, 0, 0), 1);
     double dt = 0.1;
-    Euler integrator(dt);
+    EulerCromer integrator(dt);
     int numTimesteps = 1000;
     double* kin_e = new double[1000];
     for (int timestep = 0; timestep<numTimesteps; timestep++){
@@ -73,11 +73,11 @@ TEST_CASE("Preservation og kinetic energy"){
     REQUIRE(kin_e[0] == Approx(kin_e[100]));
 }
 TEST_CASE("Preservation of total energy"){
-    SolarSystem solarSystem;
-    CelestialBody &test__object = solarSystem.createCelestialBody(vec3(1, 0, 0), vec3(0, 2*M_PI, 0), 1E-4);
-    CelestialBody &large_object = solarSystem.createCelestialBody(vec3(0, 0, 0), vec3(0, 0, 0), 1);
+    System solarSystem;
+    Particle &test__object = solarSystem.addParticle(vec3(1, 0, 0), vec3(0, 2*M_PI, 0), 1E-4);
+    Particle &large_object = solarSystem.addParticle(vec3(0, 0, 0), vec3(0, 0, 0), 1);
     double dt = 0.1;
-    Euler integrator(dt);
+    EulerCromer integrator(dt);
     int numTimesteps = 1000;
     double* kin_e = new double[1000];
     double* pot_e = new double[1000];
